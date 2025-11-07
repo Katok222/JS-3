@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function addProductToCart(productId, count) {
     const productElement = document.querySelector(`.product[data-id="${productId}"]`);
     const productImage = productElement.querySelector('.product__image').src;
-
     let cartProduct = cartProducts.querySelector(`.cart__product[data-id="${productId}"]`);
 
     if (cartProduct) {
@@ -35,30 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
       cartProduct = document.createElement('div');
       cartProduct.className = 'cart__product';
       cartProduct.setAttribute('data-id', productId);
-
-      const cartProductImage = document.createElement('img');
-      cartProductImage.className = 'cart__product-image';
-      cartProductImage.src = productImage;
-
-      const cartProductCount = document.createElement('div');
-      cartProductCount.className = 'cart__product-count';
-      cartProductCount.textContent = count;
-
-      cartProduct.appendChild(cartProductImage);
-      cartProduct.appendChild(cartProductCount);
+      cartProduct.innerHTML = `
+        <img class="cart__product-image" src="${productImage}">
+        <div class="cart__product-count">${count}</div>
+      `;
       cartProducts.appendChild(cartProduct);
     }
-
     saveCart();
-  }
-
-  // Удаление товара из корзины
-  function removeProductFromCart(productId) {
-    const cartProduct = cartProducts.querySelector(`.cart__product[data-id="${productId}"]`);
-    if (cartProduct) {
-      cartProduct.remove();
-      saveCart();
-    }
   }
 
   // Обработчики для кнопок увеличения/уменьшения количества
@@ -87,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const productId = product.getAttribute('data-id');
       const quantityValue = product.querySelector('.product__quantity-value');
       const count = parseInt(quantityValue.textContent);
-
       addProductToCart(productId, count);
     });
   });
